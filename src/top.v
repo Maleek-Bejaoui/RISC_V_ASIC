@@ -18,14 +18,14 @@ module tt_um_top (
 
   // All output pins must be assigned. If not used, assign to 0.
 //  assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
-    assign uio_out = 0;
-    assign uio_in[7:1]  = 7'b0000000;
+ //   assign uio_out = 0;
     assign uo_out[7:1]  = 7'b1111111;
+    assign uio_oe[7:1]  = 7'b1000000;
 
     
 
   // List all unused inputs to prevent warnings
-  //  wire _unused = &{ui_in[7:2], 6'b000000};
+  wire _unused = &{uio_in[7:2], 6'b000000};
    // wire _unused1 = &{uio_in, 8'b0};
 
  Sys m_riscV
@@ -34,6 +34,7 @@ module tt_um_top (
      .io_i_boot(ena),
      .io_b_gpio_in(ui_in),
      .io_b_uart_rx(uio_in[0]),
+     
      .io_b_gpio_eno(uo_out),
      .io_b_gpio_out(uio_out),
      .io_b_uart_tx(uio_oe[0])
