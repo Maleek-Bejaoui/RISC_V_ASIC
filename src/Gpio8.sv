@@ -17,8 +17,8 @@ module Gpio8(
   reg [7:0] r_out;
   reg [7:0] r_rdata;
   always @(posedge clock) begin
-    automatic logic _GEN;
-    automatic logic _GEN_0;
+      logic _GEN;
+      logic _GEN_0;
     _GEN = io_b_mem_addr == 4'h0;
     _GEN_0 = io_b_mem_addr == 4'h8;
     if (reset) begin
@@ -27,7 +27,7 @@ module Gpio8(
       r_out <= 8'h0;
     end
     else begin
-      automatic logic _GEN_1 = io_b_mem_valid & io_b_mem_wen[0];
+        logic _GEN_1 = io_b_mem_valid & io_b_mem_wen[0];
       if (_GEN_1 & _GEN)
         r_eno <= io_b_mem_wdata[7:0];
       r_in <= io_b_gpio_in;
