@@ -27,10 +27,10 @@ module Uart(
   wire        _GEN = io_b_mem_addr == 5'h4;
   wire        _GEN_0 = io_b_mem_valid & io_b_mem_wen[0];
   always @(posedge clock) begin
-    automatic logic _GEN_1;
-    automatic logic _GEN_2;
-    automatic logic _GEN_3;
-    automatic logic _GEN_4;
+      logic _GEN_1;
+      logic _GEN_2;
+      logic _GEN_3;
+      logic _GEN_4;
     _GEN_1 = io_b_mem_addr == 5'h0;
     _GEN_2 = io_b_mem_addr == 5'h8;
     _GEN_3 = io_b_mem_addr == 5'h10;
