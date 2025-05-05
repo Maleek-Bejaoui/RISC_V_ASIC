@@ -16,11 +16,11 @@ module UartTx(
   reg         r_tx;
   wire        io_o_ready_0 = r_cstate == 2'h0;
   always @(posedge clock) begin
-    automatic logic             _GEN;
-    automatic logic             _GEN_0;
-    automatic logic             _GEN_1;
-    automatic logic             _GEN_2;
-    automatic logic [3:0][15:0] _GEN_3;
+      logic             _GEN;
+      logic             _GEN_0;
+      logic             _GEN_1;
+      logic             _GEN_2;
+      logic [3:0][15:0] _GEN_3;
     _GEN = r_cstate == 2'h1;
     _GEN_0 = r_cycle_cnt == io_i_ncycle;
     _GEN_1 = r_cstate == 2'h2;
@@ -30,7 +30,7 @@ module UartTx(
       r_tx <= 1'h1;
     end
     else begin
-      automatic logic [3:0][1:0] _GEN_4;
+        logic [3:0][1:0] _GEN_4;
       _GEN_4 =
         {{(&r_cstate) & _GEN_0 ? 2'h0 : r_cstate},
          {_GEN_0 & (&r_bit_cnt) ? 2'h3 : r_cstate},
