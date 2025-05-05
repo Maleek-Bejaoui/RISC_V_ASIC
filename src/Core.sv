@@ -90,11 +90,11 @@ module Core(
       r_s3_br <= {31'h0, _m_bru_io_o_br};
     end
     else begin
-      automatic logic _GEN_0 = _m_fsm_io_o_alu & _m_fsm_io_o_mem_req;
+        logic _GEN_0 = _m_fsm_io_o_alu & _m_fsm_io_o_mem_req;
       if (_GEN_0 | _m_fsm_io_o_alu)
         r_s1_res <= _m_alu_io_o_res;
       else if (_m_fsm_io_o_mem_ack & ~r_ctrl_mem_rw) begin
-        automatic logic [3:0][31:0] _GEN_1 =
+          logic [3:0][31:0] _GEN_1 =
           {{r_s1_res},
            {io_b_mem_rdata},
            {r_ctrl_mem_signed
