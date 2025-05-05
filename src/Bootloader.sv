@@ -48,7 +48,7 @@ module Bootloader(
   wire        _GEN_15 = r_cstate == 5'h10;
   wire        _GEN_16 = _GEN_13 | _GEN_14;
   always @(posedge clock) begin
-    automatic logic _GEN_17;
+     logic _GEN_17;
     automatic logic _GEN_18;
     automatic logic _GEN_19;
     automatic logic _GEN_20;
