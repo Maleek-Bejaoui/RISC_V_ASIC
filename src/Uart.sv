@@ -26,15 +26,11 @@ module Uart(
   reg  [7:0]  r_rx_data;
   wire        _GEN = io_b_mem_addr == 5'h4;
   wire        _GEN_0 = io_b_mem_valid & io_b_mem_wen[0];
+  wire        _GEN_1 = io_b_mem_addr == 5'h0;
+  wire        _GEN_2 = io_b_mem_addr == 5'h8;
+  wire        _GEN_3 = io_b_mem_addr == 5'h10;
+  wire        _GEN_4 = ~io_i_bl & _m_rx_io_o_valid;
   always @(posedge clock) begin
-      logic _GEN_1;
-      logic _GEN_2;
-      logic _GEN_3;
-      logic _GEN_4;
-    _GEN_1 = io_b_mem_addr == 5'h0;
-    _GEN_2 = io_b_mem_addr == 5'h8;
-    _GEN_3 = io_b_mem_addr == 5'h10;
-    _GEN_4 = ~io_i_bl & _m_rx_io_o_valid;
     if (reset) begin
       r_ncycle <= 16'h1458;
       r_rx_valid <= 1'h0;

@@ -12,31 +12,29 @@ module Gpio8(
   output [7:0]  io_b_gpio_out
 );
 
-  reg [7:0] r_eno;
-  reg [7:0] r_in;
-  reg [7:0] r_out;
-  reg [7:0] r_rdata;
+  reg  [7:0] r_eno;
+  reg  [7:0] r_in;
+  reg  [7:0] r_out;
+  reg  [7:0] r_rdata;
+  wire       _GEN = io_b_mem_valid & io_b_mem_wen[0];
+  wire       _GEN_0 = io_b_mem_addr == 4'h0;
+  wire       _GEN_1 = io_b_mem_addr == 4'h8;
   always @(posedge clock) begin
-      logic _GEN;
-      logic _GEN_0;
-    _GEN = io_b_mem_addr == 4'h0;
-    _GEN_0 = io_b_mem_addr == 4'h8;
     if (reset) begin
       r_eno <= 8'h0;
       r_in <= 8'h0;
       r_out <= 8'h0;
     end
     else begin
-        logic _GEN_1 = io_b_mem_valid & io_b_mem_wen[0];
-      if (_GEN_1 & _GEN)
+      if (_GEN & _GEN_0)
         r_eno <= io_b_mem_wdata[7:0];
       r_in <= io_b_gpio_in;
-      if (~_GEN_1 | _GEN | ~_GEN_0) begin
+      if (~_GEN | _GEN_0 | ~_GEN_1) begin
       end
       else
         r_out <= io_b_mem_wdata[7:0];
     end
-    r_rdata <= _GEN ? r_eno : io_b_mem_addr == 4'h4 ? r_in : _GEN_0 ? r_out : 8'h0;
+    r_rdata <= _GEN_0 ? r_eno : io_b_mem_addr == 4'h4 ? r_in : _GEN_1 ? r_out : 8'h0;
   end // always @(posedge)
   assign io_b_mem_rdata = {24'h0, r_rdata};
   assign io_b_gpio_eno = r_eno;

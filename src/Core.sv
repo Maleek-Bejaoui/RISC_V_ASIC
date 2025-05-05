@@ -10,52 +10,62 @@ module Core(
   input  [31:0] io_b_mem_rdata
 );
 
-  wire        _m_bru_io_o_br;
-  wire [31:0] _m_bru_io_o_res;
-  wire [31:0] _m_alu_io_o_res;
-  wire [1:0]  _m_decoder_io_o_seq;
-  wire [2:0]  _m_decoder_io_o_ctrl_alu_uop;
-  wire        _m_decoder_io_o_ctrl_alu_signed;
-  wire [2:0]  _m_decoder_io_o_ctrl_bru_uop;
-  wire        _m_decoder_io_o_ctrl_bru_pc_rel;
-  wire        _m_decoder_io_o_ctrl_mem_rw;
-  wire [1:0]  _m_decoder_io_o_ctrl_mem_size;
-  wire        _m_decoder_io_o_ctrl_mem_signed;
-  wire        _m_decoder_io_o_ctrl_wb_en;
-  wire [3:0]  _m_decoder_io_o_ctrl_wb_addr;
-  wire [3:0]  _m_decoder_io_o_rs1;
-  wire [3:0]  _m_decoder_io_o_rs2;
-  wire        _m_decoder_io_o_s1_reg;
-  wire [31:0] _m_decoder_io_o_s1_data;
-  wire        _m_decoder_io_o_s2_reg;
-  wire [31:0] _m_decoder_io_o_s2_data;
-  wire        _m_decoder_io_o_s3_reg;
-  wire [31:0] _m_decoder_io_o_s3_data;
-  wire [31:0] _m_gpr_io_b_read_0_data;
-  wire [31:0] _m_gpr_io_b_read_1_data;
-  wire        _m_fsm_io_o_fetch;
-  wire        _m_fsm_io_o_instr;
-  wire        _m_fsm_io_o_decoder;
-  wire        _m_fsm_io_o_alu;
-  wire        _m_fsm_io_o_bru;
-  wire        _m_fsm_io_o_mem_req;
-  wire        _m_fsm_io_o_mem_ack;
-  wire        _m_fsm_io_o_wb;
-  reg  [15:0] r_pc;
-  reg  [31:0] r_instr;
-  reg  [2:0]  r_ctrl_alu_uop;
-  reg         r_ctrl_alu_signed;
-  reg  [2:0]  r_ctrl_bru_uop;
-  reg         r_ctrl_bru_pc_rel;
-  reg         r_ctrl_mem_rw;
-  reg  [1:0]  r_ctrl_mem_size;
-  reg         r_ctrl_mem_signed;
-  reg         r_ctrl_wb_en;
-  reg  [3:0]  r_ctrl_wb_addr;
-  reg  [31:0] r_s1_res;
-  reg  [31:0] r_s2_pc;
-  reg  [31:0] r_s3_br;
-  wire        _GEN = _m_fsm_io_o_bru & r_ctrl_bru_pc_rel;
+  wire             _m_bru_io_o_br;
+  wire [31:0]      _m_bru_io_o_res;
+  wire [31:0]      _m_alu_io_o_res;
+  wire [1:0]       _m_decoder_io_o_seq;
+  wire [2:0]       _m_decoder_io_o_ctrl_alu_uop;
+  wire             _m_decoder_io_o_ctrl_alu_signed;
+  wire [2:0]       _m_decoder_io_o_ctrl_bru_uop;
+  wire             _m_decoder_io_o_ctrl_bru_pc_rel;
+  wire             _m_decoder_io_o_ctrl_mem_rw;
+  wire [1:0]       _m_decoder_io_o_ctrl_mem_size;
+  wire             _m_decoder_io_o_ctrl_mem_signed;
+  wire             _m_decoder_io_o_ctrl_wb_en;
+  wire [3:0]       _m_decoder_io_o_ctrl_wb_addr;
+  wire [3:0]       _m_decoder_io_o_rs1;
+  wire [3:0]       _m_decoder_io_o_rs2;
+  wire             _m_decoder_io_o_s1_reg;
+  wire [31:0]      _m_decoder_io_o_s1_data;
+  wire             _m_decoder_io_o_s2_reg;
+  wire [31:0]      _m_decoder_io_o_s2_data;
+  wire             _m_decoder_io_o_s3_reg;
+  wire [31:0]      _m_decoder_io_o_s3_data;
+  wire [31:0]      _m_gpr_io_b_read_0_data;
+  wire [31:0]      _m_gpr_io_b_read_1_data;
+  wire             _m_fsm_io_o_fetch;
+  wire             _m_fsm_io_o_instr;
+  wire             _m_fsm_io_o_decoder;
+  wire             _m_fsm_io_o_alu;
+  wire             _m_fsm_io_o_bru;
+  wire             _m_fsm_io_o_mem_req;
+  wire             _m_fsm_io_o_mem_ack;
+  wire             _m_fsm_io_o_wb;
+  reg  [15:0]      r_pc;
+  reg  [31:0]      r_instr;
+  reg  [2:0]       r_ctrl_alu_uop;
+  reg              r_ctrl_alu_signed;
+  reg  [2:0]       r_ctrl_bru_uop;
+  reg              r_ctrl_bru_pc_rel;
+  reg              r_ctrl_mem_rw;
+  reg  [1:0]       r_ctrl_mem_size;
+  reg              r_ctrl_mem_signed;
+  reg              r_ctrl_wb_en;
+  reg  [3:0]       r_ctrl_wb_addr;
+  reg  [31:0]      r_s1_res;
+  reg  [31:0]      r_s2_pc;
+  reg  [31:0]      r_s3_br;
+  wire             _GEN = _m_fsm_io_o_bru & r_ctrl_bru_pc_rel;
+  wire [3:0][31:0] _GEN_0 =
+    {{r_s1_res},
+     {io_b_mem_rdata},
+     {r_ctrl_mem_signed
+        ? {{16{io_b_mem_rdata[15]}}, io_b_mem_rdata[15:0]}
+        : {16'h0, io_b_mem_rdata[15:0]}},
+     {r_ctrl_mem_signed
+        ? {{24{io_b_mem_rdata[7]}}, io_b_mem_rdata[7:0]}
+        : {24'h0, io_b_mem_rdata[7:0]}}};
+  wire             _GEN_1 = _m_fsm_io_o_alu & _m_fsm_io_o_mem_req;
   always @(posedge clock) begin
     if (reset)
       r_pc <= 16'h0;
@@ -90,22 +100,11 @@ module Core(
       r_s3_br <= {31'h0, _m_bru_io_o_br};
     end
     else begin
-        logic _GEN_0 = _m_fsm_io_o_alu & _m_fsm_io_o_mem_req;
-      if (_GEN_0 | _m_fsm_io_o_alu)
+      if (_GEN_1 | _m_fsm_io_o_alu)
         r_s1_res <= _m_alu_io_o_res;
-      else if (_m_fsm_io_o_mem_ack & ~r_ctrl_mem_rw) begin
-          logic [3:0][31:0] _GEN_1 =
-          {{r_s1_res},
-           {io_b_mem_rdata},
-           {r_ctrl_mem_signed
-              ? {{16{io_b_mem_rdata[15]}}, io_b_mem_rdata[15:0]}
-              : {16'h0, io_b_mem_rdata[15:0]}},
-           {r_ctrl_mem_signed
-              ? {{24{io_b_mem_rdata[7]}}, io_b_mem_rdata[7:0]}
-              : {24'h0, io_b_mem_rdata[7:0]}}};
-        r_s1_res <= _GEN_1[r_ctrl_mem_size];
-      end
-      if (_GEN_0 | ~(_m_fsm_io_o_alu | _m_fsm_io_o_mem_ack)) begin
+      else if (_m_fsm_io_o_mem_ack & ~r_ctrl_mem_rw)
+        r_s1_res <= _GEN_0[r_ctrl_mem_size];
+      if (_GEN_1 | ~(_m_fsm_io_o_alu | _m_fsm_io_o_mem_ack)) begin
       end
       else
         r_s3_br <= 32'h0;
