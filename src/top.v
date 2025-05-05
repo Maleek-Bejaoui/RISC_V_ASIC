@@ -35,7 +35,7 @@ module tt_um_top (
      .io_b_gpio_in(ui_in),
      .io_b_uart_rx(uio_in[0]),
      .io_b_gpio_eno(uo_out),
-     .io_b_gpio_out(uio_out)
+     .io_b_gpio_out(uio_out),
      .io_b_uart_tx(uio_oe[0])
      
      
