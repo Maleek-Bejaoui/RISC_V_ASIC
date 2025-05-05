@@ -39,17 +39,17 @@ pinout:
   # Inputs
   ui[0]: "clk"
   ui[1]: "rst_n"
-  ui[2]: "ce"
-  ui[3]: "ui_in[0]"
-  ui[4]: "ui_in[1]"
+  ui[2]: "ena"
+  ui[3]: "ui_in"
+  ui[4]: "uio_in[0]"
   ui[5]: ""
   ui[6]: ""
   ui[7]: ""
 
   # Outputs
-  uo[0]: "uo_out[0]"
-  uo[1]: ""
-  uo[2]: ""
+  uo[0]: "uo_out"
+  uo[1]: "uio_out"
+  uo[2]: "uio_oe[0]"
   uo[3]: ""
   uo[4]: ""
   uo[5]: ""
