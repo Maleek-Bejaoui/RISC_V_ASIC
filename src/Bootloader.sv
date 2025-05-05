@@ -96,8 +96,8 @@ module Bootloader(
           r_cstate <= 5'h4;
       end
       else if (~_GEN_3) begin
-        automatic logic       _GEN_31;
-        automatic logic [4:0] _GEN_32;
+         logic       _GEN_31;
+         logic [4:0] _GEN_32;
         _GEN_31 = r_num_cnt == r_num;
         _GEN_32 = _GEN_31 ? 5'h4 : 5'h2;
         if (_GEN_4)
@@ -236,7 +236,7 @@ module Bootloader(
           r_start_1 <= io_i_data;
       end
       else begin
-        automatic logic _GEN_33 = _GEN_6 | _GEN_7 | _GEN_8 | _GEN_9 | _GEN_10;
+         logic _GEN_33 = _GEN_6 | _GEN_7 | _GEN_8 | _GEN_9 | _GEN_10;
         if (_GEN_33 | ~(_GEN_11 & _GEN_23)) begin
         end
         else
@@ -257,8 +257,8 @@ module Bootloader(
           r_mem_addr <= {r_start_1, r_start_0};
       end
       else begin
-        automatic logic _GEN_34;
-        automatic logic _GEN_35;
+         logic _GEN_34;
+         logic _GEN_35;
         _GEN_34 = _GEN_10 | _GEN_11;
         _GEN_35 = _GEN_7 | _GEN_8 | _GEN_9 | _GEN_34;
         if (_GEN_35 | ~(_GEN_12 & _GEN_23)) begin
