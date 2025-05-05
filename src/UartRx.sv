@@ -18,9 +18,9 @@ module UartRx(
   wire        _GEN_1 = r_cstate == 2'h2;
   wire        _GEN_2 = r_cycle_cnt == io_i_ncycle;
   always @(posedge clock) begin
-    automatic logic             _GEN_3;
-    automatic logic             _GEN_4;
-    automatic logic [3:0][15:0] _GEN_5;
+      logic             _GEN_3;
+      logic             _GEN_4;
+      logic [3:0][15:0] _GEN_5;
     _GEN_3 = r_cycle_cnt == {1'h0, io_i_ncycle[15:1]};
     _GEN_4 = _GEN_1 & _GEN_2;
     if (reset) begin
@@ -28,7 +28,7 @@ module UartRx(
       r_rx <= 1'h1;
     end
     else begin
-      automatic logic [3:0][1:0] _GEN_6;
+        logic [3:0][1:0] _GEN_6;
       _GEN_6 =
         {{(&r_cstate) & _GEN_2 ? 2'h0 : r_cstate},
          {_GEN_2 & (&r_bit_cnt) ? 2'h3 : r_cstate},
