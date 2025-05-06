@@ -12,7 +12,8 @@ module Gpio8(
   output [7:0]  io_b_gpio_out
 );
 
-  reg  [7:0] r_eno;
+  reg [7:0] r_eno = 8'b00000001; // r_eno initialisé pour éviter suppression par Yosys ; sera modifié par le bus
+
   reg  [7:0] r_in;
   reg  [7:0] r_out;
   reg  [7:0] r_rdata;
