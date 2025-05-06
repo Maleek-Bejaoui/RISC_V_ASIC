@@ -12,8 +12,7 @@ module Gpio8(
   output [7:0]  io_b_gpio_out
 );
 
-  reg [7:0] r_eno = 8'b00000001; // r_eno initialisé pour éviter suppression par Yosys ; sera modifié par le bus
-
+  reg [7:0] r_eno;
   reg  [7:0] r_in;
   reg  [7:0] r_out;
   reg  [7:0] r_rdata;
@@ -22,23 +21,23 @@ module Gpio8(
   wire       _GEN_1 = io_b_mem_addr == 4'h8;
   always @(posedge clock) begin
     if (reset) begin
-      r_eno <= 8'h0;
+      io_b_gpio_eno <= 8'h0;
       r_in <= 8'h0;
       r_out <= 8'h0;
     end
     else begin
       if (_GEN & _GEN_0)
-        r_eno <= io_b_mem_wdata[7:0];
+        io_b_gpio_eno <= io_b_mem_wdata[7:0];
       r_in <= io_b_gpio_in;
       if (~_GEN | _GEN_0 | ~_GEN_1) begin
       end
       else
         r_out <= io_b_mem_wdata[7:0];
     end
-    r_rdata <= _GEN_0 ? r_eno : io_b_mem_addr == 4'h4 ? r_in : _GEN_1 ? r_out : 8'h0;
+    r_rdata <= _GEN_0 ? io_b_gpio_eno : io_b_mem_addr == 4'h4 ? r_in : _GEN_1 ? r_out : 8'h0;
   end // always @(posedge)
   assign io_b_mem_rdata = {24'h0, r_rdata};
-  assign io_b_gpio_eno = r_eno;
+ // assign io_b_gpio_eno = io_b_gpio_eno;
   assign io_b_gpio_out = r_out;
 endmodule
 
