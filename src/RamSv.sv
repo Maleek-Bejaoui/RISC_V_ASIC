@@ -15,7 +15,7 @@
  */
 
 module RamSv
-  #(  parameter INIT_FILE = "",
+  #(  parameter INIT_FILE = "sw.ram.mem",
       parameter N_DATA = 64,
       parameter N_DATA_BYTE = 4,
       
