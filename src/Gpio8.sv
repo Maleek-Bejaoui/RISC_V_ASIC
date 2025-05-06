@@ -1,81 +1,64 @@
-module Gpio8 (
-    input logic clk,
-    input logic rst,
-
-    input logic        i_mem_valid,
-    input logic [1:0]  i_mem_addr,  // N_GPIO8_BIT = 2 → 2 bits
-    input logic        i_mem_wen,   // un seul bit d'écriture suffisant
-    input logic [31:0] i_mem_wdata, // N_DATA_BYTE = 4 → 32 bits
-
-    output logic        o_mem_ready,
-    output logic [31:0] o_mem_rdata,
-
-    output logic [7:0] o_gpio_eno,
-    input  logic [7:0] i_gpio_in,
-    output logic [7:0] o_gpio_out
+// Compatible with Yosys and TinyTapeout
+module Gpio8(
+  input         clock,
+  input         reset,
+  input         io_b_mem_valid,
+  input  [3:0]  io_b_mem_addr,
+  input  [3:0]  io_b_mem_wen,
+  input  [31:0] io_b_mem_wdata,
+  output [31:0] io_b_mem_rdata,
+  output [7:0]  io_b_gpio_eno,
+  input  [7:0]  io_b_gpio_in,
+  output [7:0]  io_b_gpio_out
 );
 
-    // Adresse mappée en dur
-    localparam int C_GPIO8_ENO = 0;
-    localparam int C_GPIO8_IN  = 1;
-    localparam int C_GPIO8_OUT = 2;
+  // Internal registers
+  reg [7:0] r_eno;
+  reg [7:0] r_in;
+  reg [7:0] r_out;
+  reg [7:0] r_rdata;
 
-    logic [7:0] r_eno, r_in, r_out;
-    logic [7:0] r_rdata;
-    logic [7:0] s_rdata, s_eno, s_out;
+  // Constants (memory-mapped register addresses)
+  localparam C_GPIO8_ENO = 4'h0;
+  localparam C_GPIO8_IN  = 4'h4;
+  localparam C_GPIO8_OUT = 4'h8;
 
-    assign o_mem_ready = 1'b1;
-    assign o_mem_rdata = {24'b0, r_rdata}; // 8 bits de données utiles
+  wire write_en = io_b_mem_valid && io_b_mem_wen[0];
+  wire is_write_eno  = io_b_mem_addr == C_GPIO8_ENO;
+  wire is_write_out  = io_b_mem_addr == C_GPIO8_OUT;
 
-    assign o_gpio_eno  = r_eno;
-    assign o_gpio_out  = r_out;
+  // Sequential logic
+  always @(posedge clock) begin
+    if (reset) begin
+      r_eno   <= 8'h00;
+      r_out   <= 8'h00;
+      r_in    <= 8'h00;
+      r_rdata <= 8'h00;
+    end else begin
+      // Write
+      if (write_en) begin
+        if (is_write_eno)
+          r_eno <= io_b_mem_wdata[7:0];
+        else if (is_write_out)
+          r_out <= io_b_mem_wdata[7:0];
+      end
 
-    // Lecture combinatoire
-    always_comb begin
-        case (i_mem_addr)
-            C_GPIO8_ENO: s_rdata = r_eno;
-            C_GPIO8_IN:  s_rdata = r_in;
-            C_GPIO8_OUT: s_rdata = r_out;
-            default:     s_rdata = r_rdata;
-        endcase
+      // Read input
+      r_in <= io_b_gpio_in;
+
+      // Read logic (captured)
+      case (io_b_mem_addr)
+        C_GPIO8_ENO: r_rdata <= r_eno;
+        C_GPIO8_IN:  r_rdata <= r_in;
+        C_GPIO8_OUT: r_rdata <= r_out;
+        default:     r_rdata <= 8'h00;
+      endcase
     end
+  end
 
-    // Écriture combinatoire
-    always_comb begin
-        if (i_mem_valid && i_mem_wen) begin
-            case (i_mem_addr)
-                C_GPIO8_ENO: begin
-                    s_eno = i_mem_wdata[7:0];
-                    s_out = r_out;
-                end
-                C_GPIO8_OUT: begin
-                    s_eno = r_eno;
-                    s_out = i_mem_wdata[7:0];
-                end
-                default: begin
-                    s_eno = r_eno;
-                    s_out = r_out;
-                end
-            endcase
-        end else begin
-            s_eno = r_eno;
-            s_out = r_out;
-        end
-    end
-
-    // Processus séquentiel
-    always_ff @(posedge clk) begin
-        if (rst) begin
-            r_eno   <= 8'b0;
-            r_in    <= 8'b0;
-            r_out   <= 8'b0;
-            r_rdata <= 8'b0;
-        end else begin
-            r_eno   <= s_eno;
-            r_out   <= s_out;
-            r_in    <= i_gpio_in;
-            r_rdata <= s_rdata;
-        end
-    end
+  // Outputs
+  assign io_b_mem_rdata = {24'h000000, r_rdata};  // padded to 32 bits
+  assign io_b_gpio_eno  = r_eno;
+  assign io_b_gpio_out  = r_out;
 
 endmodule
