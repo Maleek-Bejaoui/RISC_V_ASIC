@@ -35,13 +35,14 @@ module tt_um_top (
  Sys m_riscV
     (.clock(clk),
      .reset(!rst_n),
+     
      .io_i_boot(ui_in[1]),
      .io_b_uart_rx(ui_in[0]),
      .io_b_uart_tx(uo_out[0]),
      
      .io_b_gpio_eno(uio_oe),
      .io_b_gpio_out(uio_out),
-     .io_b_gpio_in(uio_in),
+     .io_b_gpio_in(uio_in)
     );
 
 
