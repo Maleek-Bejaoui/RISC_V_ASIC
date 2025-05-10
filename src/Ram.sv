@@ -11,7 +11,7 @@ module Ram(
 
   RamSv #(
     .INIT_FILE("sw.ram.mem"),
-    .N_DATA(32),
+    .N_DATA(24),
     .N_DATA_BYTE(4)
   ) m_ram (
     .i_clock (clock),
